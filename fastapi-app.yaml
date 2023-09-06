@@ -1,0 +1,53 @@
+namespace: fastapi-app
+fastapi-app:
+  defines: runnable
+  metadata:
+    name: fastapi-app
+    description: A simple FastAPI application with a database connection
+    icon: https://emojiapi.dev/api/v1/snake.svg
+  containers:
+    fastapi-app:
+      build: .
+  services:
+    main:
+      container: fastapi-app
+      port: 8000
+      host-port: 8000
+      publish: false
+      protocol: TCP
+      description: Main port used by the app
+  connections:
+    database:
+      target: postgresql/db
+      service: postgres
+  variables:
+    database-url:
+      env: DATABASE_URL
+      type: string
+      description: URL of the database the app connects to
+      value: <- connection-hostname("database")
+    pythondontwritebytecode:
+      env: PYTHONDONTWRITEBYTECODE
+      type: string
+      description: Prevents Python from writing pyc files to disk
+      value: '1'
+    pythonunbuffered:
+      env: PYTHONUNBUFFERED
+      type: string
+      description: Prevents Python from buffering stdout and stderr
+      value: '1'
+    postgres-user:
+      env: POSTGRES_USER
+      type: string
+      description: Database user name
+      value: fastapi
+    postgres-password:
+      env: POSTGRES_PASSWORD
+      type: string
+      description: Database user password
+      value: '!!!SETME-USE-SECRETS!!!'
+    postgres-db:
+      env: POSTGRES_DB
+      type: string
+      description: Database name
+      value: fastapi
