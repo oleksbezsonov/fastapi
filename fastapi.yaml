@@ -3,53 +3,54 @@ fastapi:
   defines: runnable
   metadata:
     name: fastapi
-    description: >-
-      FastAPI application with functions for handling user related requests and
-      questions
+    description: A FastAPI application in Python for managing users and questions.
     icon: https://emojiapi.dev/api/v1/snake.svg
   containers:
     fastapi:
       build: .
   services:
-    main:
+    app-main-port:
       container: fastapi
       port: 8002
       host-port: 8002
       publish: false
       protocol: TCP
-      description: Main port for FastAPI application
+      description: Main port for the FastAPI application.
   connections:
     database:
-      target: postgresql/db
+      target: fastapi/db
       service: postgres
   variables:
-    pythondontwritebytecode:
-      env: PYTHONDONTWRITEBYTECODE
-      type: string
-      description: Prevents Python from writing pyc files to disk
-      value: '1'
-    pythonunbuffered:
-      env: PYTHONUNBUFFERED
-      type: string
-      description: Keeps Python from buffering stdout and stderr
-      value: '1'
     database-url:
       env: DATABASE_URL
       type: string
-      description: Database connection string
+      description: URL to connect to the database.
       value: <- connection-hostname("database")
     postgres-user:
       env: POSTGRES_USER
       type: string
-      description: PostgreSQL username
+      description: Username to connect to the database.
       value: fastapi
     postgres-password:
       env: POSTGRES_PASSWORD
       type: string
-      description: PostgreSQL password
+      description: Password to connect to the database.
       value: '!!!SETME-USE-SECRETS!!!'
     postgres-db:
       env: POSTGRES_DB
       type: string
-      description: PostgreSQL database name
+      description: Database name to connect to.
       value: fastapi
+    app-port:
+      env: APP_PORT
+      type: string
+      description: Main port for the FastAPI application.
+      value: '8000'
+db:
+  defines: runnable
+  inherits: postgresql/db
+stack:
+  defines: group
+  runnable-list:
+    - fastapi/fastapi
+    - fastapi/db
