@@ -3,53 +3,47 @@ fastapi:
   defines: runnable
   metadata:
     name: fastapi
-    description: >-
-      FastAPI application with functions for handling user related requests and
-      questions
-    icon: https://emojiapi.dev/api/v1/snake.svg
+    description: A FastAPI application which serves as a data API for quizzes.
+    icon: https://emojiapi.dev/api/v1/books.svg
   containers:
     fastapi:
       build: .
   services:
-    main:
+    app-port:
       container: fastapi
       port: 8002
       host-port: 8002
       publish: false
       protocol: TCP
-      description: Main port for FastAPI application
-  connections:
-    database:
-      target: postgresql/db
-      service: postgres
+      description: The port the FastAPI application is exposed on.
   variables:
-    pythondontwritebytecode:
-      env: PYTHONDONTWRITEBYTECODE
-      type: string
-      description: Prevents Python from writing pyc files to disk
-      value: '1'
-    pythonunbuffered:
-      env: PYTHONUNBUFFERED
-      type: string
-      description: Keeps Python from buffering stdout and stderr
-      value: '1'
     database-url:
       env: DATABASE_URL
       type: string
-      description: Database connection string
-      value: <- connection-hostname("database")
+      description: Database connection URL
+      value: '!!!SETME!!!'
     postgres-user:
       env: POSTGRES_USER
       type: string
-      description: PostgreSQL username
+      description: Postgres user
       value: fastapi
     postgres-password:
       env: POSTGRES_PASSWORD
       type: string
-      description: PostgreSQL password
+      description: Postgres password
       value: '!!!SETME-USE-SECRETS!!!'
     postgres-db:
       env: POSTGRES_DB
       type: string
-      description: PostgreSQL database name
+      description: Postgres database name
       value: fastapi
+    pythondontwritebytecode:
+      env: PYTHONDONTWRITEBYTECODE
+      type: string
+      description: prevents Python from writing pyc files to disk
+      value: '1'
+    pythonunbuffered:
+      env: PYTHONUNBUFFERED
+      type: string
+      description: prevents Python from buffering STDOUT and STDERR
+      value: '1'
