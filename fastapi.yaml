@@ -4,52 +4,32 @@ fastapi:
   metadata:
     name: fastapi
     description: >-
-      FastAPI application with functions for handling user related requests and
-      questions
+      A FastAPI application that allows users to retrieve, view, and answer
+      questions.
     icon: https://emojiapi.dev/api/v1/snake.svg
   containers:
     fastapi:
       build: .
   services:
-    main:
+    fastapi-port:
       container: fastapi
       port: 8002
       host-port: 8002
       publish: false
       protocol: TCP
-      description: Main port for FastAPI application
-  connections:
-    database:
-      target: postgresql/db
-      service: postgres
+      description: Port used to serve FastAPI's web requests
   variables:
     pythondontwritebytecode:
       env: PYTHONDONTWRITEBYTECODE
       type: string
-      description: Prevents Python from writing pyc files to disk
+      description: >-
+        Prevents Python from writing pyc files to disk (equivalent to python -B
+        option)
       value: '1'
     pythonunbuffered:
       env: PYTHONUNBUFFERED
       type: string
-      description: Keeps Python from buffering stdout and stderr
+      description: >-
+        Prevents Python from buffering stdout and stderr (equivalent to python
+        -u option)
       value: '1'
-    database-url:
-      env: DATABASE_URL
-      type: string
-      description: Database connection string
-      value: <- connection-hostname("database")
-    postgres-user:
-      env: POSTGRES_USER
-      type: string
-      description: PostgreSQL username
-      value: fastapi
-    postgres-password:
-      env: POSTGRES_PASSWORD
-      type: string
-      description: PostgreSQL password
-      value: '!!!SETME-USE-SECRETS!!!'
-    postgres-db:
-      env: POSTGRES_DB
-      type: string
-      description: PostgreSQL database name
-      value: fastapi
